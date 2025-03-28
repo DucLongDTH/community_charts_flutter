@@ -1,5 +1,5 @@
 name: community_charts
-repository: https://github.com/juliansteenbakker/community_charts
+repository: https://github.com/DucLongDTH/community_charts_flutter
 
 packages:
   - community_charts_common
