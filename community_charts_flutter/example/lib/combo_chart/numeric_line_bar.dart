@@ -20,6 +20,7 @@ import 'dart:math';
 // EXCLUDE_FROM_GALLERY_DOCS_END
 import 'package:community_charts_flutter/community_charts_flutter.dart'
     as charts;
+import 'package:community_charts_flutter/community_charts_flutter.dart';
 import 'package:flutter/material.dart';
 
 class NumericComboLineBarChart extends StatelessWidget {
@@ -91,7 +92,7 @@ class NumericComboLineBarChart extends StatelessWidget {
         ..setAttribute(charts.rendererIdKey, 'customBar'),
       new charts.Series<LinearSales, int>(
           id: 'Mobile',
-          colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+          colorFn: (_, __) => charts.MaterialPalette.deepOrange.shadeDefault,
           domainFn: (LinearSales sales, _) => sales.year,
           measureFn: (LinearSales sales, _) => sales.sales,
           data: mobileSalesData),
@@ -102,10 +103,23 @@ class NumericComboLineBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new charts.NumericComboChart(seriesList,
+        gradientConfig: ChartCanvasDecorationConfig(
+          isShowGradient: true,
+          gradient: LinearGradient(
+            colors: [
+              Colors.red,
+              Colors.blue,
+            ],
+          ),
+        ),
         animate: animate,
+        behaviors: [charts.PanAndZoomBehavior()],
         // Configure the default renderer as a line renderer. This will be used
         // for any series that does not define a rendererIdKey.
-        defaultRenderer: new charts.LineRendererConfig(),
+        defaultRenderer: new charts.LineRendererConfig(
+            strokeWidthPx: 4,
+            lineBorderWidth: 5,
+            lineBorderColor: charts.Color.fromHex(code: '#000000')),
         // Custom renderer configuration for the bar series.
         customSeriesRenderers: [
           new charts.BarRendererConfig(

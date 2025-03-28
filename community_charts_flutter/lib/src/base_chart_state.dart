@@ -93,6 +93,7 @@ class BaseChartState<D> extends State<BaseChart<D>>
 
   /// Builds the common chart canvas widget.
   Widget _buildChartContainer() {
+    /// LongNTQ: adding params gradientConfig
     final chartContainer = new ChartContainer<D>(
       oldChartWidget: _oldWidget,
       chartWidget: widget,
@@ -101,6 +102,7 @@ class BaseChartState<D> extends State<BaseChart<D>>
       rtl: Directionality.of(context) == TextDirection.rtl,
       rtlSpec: widget.rtlSpec,
       userManagedState: widget.userManagedState,
+      gradientConfig: widget.gradientConfig,
     );
     _oldWidget = widget;
 

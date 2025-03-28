@@ -199,6 +199,8 @@ class LineRenderer<D> extends BaseCartesianRenderer<D> {
             strokeWidthPx: strokeWidthPx,
             styleKey: styleKey,
             roundEndCaps: config.roundEndCaps,
+            lineBorderColor: config.lineBorderColor,
+            lineBorderWidth: config.lineBorderWidth,
           );
 
           styleSegments.add(currentDetails);
@@ -591,6 +593,8 @@ class LineRenderer<D> extends BaseCartesianRenderer<D> {
     final strokeWidthPx = styleSegment.strokeWidthPx;
     final styleKey = styleSegment.styleKey;
     final roundEndCaps = styleSegment.roundEndCaps;
+    final lineBorderColor = styleSegment.lineBorderColor;
+    final lineBorderWidth = styleSegment.lineBorderWidth;
 
     // Get a list of all positioned points for this series.
     final pointList = _createPointListForSeries(series, initializeFromZero);
@@ -627,6 +631,8 @@ class LineRenderer<D> extends BaseCartesianRenderer<D> {
         strokeWidthPx: strokeWidthPx,
         styleKey: lineStyleKey,
         roundEndCaps: roundEndCaps,
+        lineBorderColor: lineBorderColor,
+        lineBorderWidth: lineBorderWidth,
       ));
     }
 
@@ -1003,6 +1009,8 @@ class LineRenderer<D> extends BaseCartesianRenderer<D> {
               dashPattern: line.dashPattern,
               points: line.points!.toPoints(),
               stroke: line.color,
+              borderLineColor: line.lineBorderColor,
+              borderLineWidth: line.lineBorderWidth,
               strokeWidthPx: line.strokeWidthPx,
               roundEndCaps: line.roundEndCaps);
         });
@@ -1258,6 +1266,8 @@ class _LineRendererElement<D> {
   double strokeWidthPx;
   String styleKey;
   bool roundEndCaps;
+  final double? lineBorderWidth;
+  final Color? lineBorderColor;
 
   _LineRendererElement({
     this.points,
@@ -1270,6 +1280,8 @@ class _LineRendererElement<D> {
     required this.strokeWidthPx,
     required this.styleKey,
     required this.roundEndCaps,
+    this.lineBorderColor,
+    this.lineBorderWidth,
   });
 
   _LineRendererElement<D> clone() {
@@ -1284,6 +1296,8 @@ class _LineRendererElement<D> {
       strokeWidthPx: strokeWidthPx,
       styleKey: styleKey,
       roundEndCaps: roundEndCaps,
+      lineBorderColor: lineBorderColor,
+      lineBorderWidth: lineBorderWidth,
     );
   }
 

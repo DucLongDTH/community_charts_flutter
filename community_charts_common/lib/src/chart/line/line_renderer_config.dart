@@ -13,6 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:community_charts_common/community_charts_common.dart';
+
 import '../../common/symbol_renderer.dart';
 import '../common/series_renderer_config.dart'
     show RendererAttributes, SeriesRendererConfig;
@@ -76,6 +78,10 @@ class LineRendererConfig<D> extends LayoutViewConfig
 
   final List<PointRendererDecorator<D>> pointRendererDecorators;
 
+  final double? lineBorderWidth;
+
+  final Color? lineBorderColor;
+
   LineRendererConfig(
       {this.customRendererId,
       this.radiusPx = 3.5,
@@ -89,6 +95,8 @@ class LineRendererConfig<D> extends LayoutViewConfig
       this.areaOpacity = 0.1,
       this.roundEndCaps = false,
       this.pointRendererDecorators = const [],
+      this.lineBorderWidth,
+      this.lineBorderColor,
       SymbolRenderer? symbolRenderer})
       : symbolRenderer = symbolRenderer ?? LineSymbolRenderer();
 

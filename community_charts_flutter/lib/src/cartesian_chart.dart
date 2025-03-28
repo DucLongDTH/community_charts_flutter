@@ -14,6 +14,7 @@
 // limitations under the License.
 
 import 'dart:collection' show LinkedHashMap;
+import 'package:community_charts_flutter/src/chart_canvas.dart';
 import 'package:meta/meta.dart' show immutable, protected;
 
 import 'package:community_charts_common/community_charts_common.dart' as common
@@ -34,42 +35,42 @@ import 'user_managed_state.dart' show UserManagedState;
 
 @immutable
 abstract class CartesianChart<D> extends BaseChart<D> {
+  /// LongNTQ: adding params gradientConfig
   final common.AxisSpec? domainAxis;
   final common.NumericAxisSpec? primaryMeasureAxis;
   final common.NumericAxisSpec? secondaryMeasureAxis;
   final LinkedHashMap<String, common.NumericAxisSpec>? disjointMeasureAxes;
   final bool? flipVerticalAxis;
 
-  CartesianChart(
-    List<common.Series<dynamic, D>> seriesList, {
-    bool? animate,
-    Duration? animationDuration,
-    this.domainAxis,
-    this.primaryMeasureAxis,
-    this.secondaryMeasureAxis,
-    this.disjointMeasureAxes,
-    common.SeriesRendererConfig<D>? defaultRenderer,
-    List<common.SeriesRendererConfig<D>>? customSeriesRenderers,
-    List<ChartBehavior<D>>? behaviors,
-    List<SelectionModelConfig<D>>? selectionModels,
-    common.RTLSpec? rtlSpec,
-    bool defaultInteractions = true,
-    LayoutConfig? layoutConfig,
-    UserManagedState<D>? userManagedState,
-    this.flipVerticalAxis,
-  }) : super(
-          seriesList,
-          animate: animate,
-          animationDuration: animationDuration,
-          defaultRenderer: defaultRenderer,
-          customSeriesRenderers: customSeriesRenderers,
-          behaviors: behaviors,
-          selectionModels: selectionModels,
-          rtlSpec: rtlSpec,
-          defaultInteractions: defaultInteractions,
-          layoutConfig: layoutConfig,
-          userManagedState: userManagedState,
-        );
+  CartesianChart(List<common.Series<dynamic, D>> seriesList,
+      {bool? animate,
+      Duration? animationDuration,
+      this.domainAxis,
+      this.primaryMeasureAxis,
+      this.secondaryMeasureAxis,
+      this.disjointMeasureAxes,
+      common.SeriesRendererConfig<D>? defaultRenderer,
+      List<common.SeriesRendererConfig<D>>? customSeriesRenderers,
+      List<ChartBehavior<D>>? behaviors,
+      List<SelectionModelConfig<D>>? selectionModels,
+      common.RTLSpec? rtlSpec,
+      bool defaultInteractions = true,
+      LayoutConfig? layoutConfig,
+      UserManagedState<D>? userManagedState,
+      this.flipVerticalAxis,
+      ChartCanvasDecorationConfig? gradientConfig})
+      : super(seriesList,
+            animate: animate,
+            animationDuration: animationDuration,
+            defaultRenderer: defaultRenderer,
+            customSeriesRenderers: customSeriesRenderers,
+            behaviors: behaviors,
+            selectionModels: selectionModels,
+            rtlSpec: rtlSpec,
+            defaultInteractions: defaultInteractions,
+            layoutConfig: layoutConfig,
+            userManagedState: userManagedState,
+            gradientConfig: gradientConfig);
 
   @override
   void updateCommonChart(common.BaseChart<D> baseChart, BaseChart<D>? oldWidget,

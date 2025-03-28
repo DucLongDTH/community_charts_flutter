@@ -163,6 +163,7 @@ export 'package:community_charts_common/community_charts_common.dart'
         ViewMargin,
         VocalizationCallback;
 
+export 'src/chart_canvas.dart' show ChartCanvasDecorationConfig;
 export 'src/bar_chart.dart';
 export 'src/base_chart.dart' show BaseChart, LayoutConfig;
 export 'src/behaviors/a11y/domain_a11y_explore_behavior.dart'

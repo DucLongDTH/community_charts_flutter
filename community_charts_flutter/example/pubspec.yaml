@@ -6,7 +6,8 @@ environment:
 
 dependencies:
   community_charts_flutter:
-    path: ../
+    path: ../../community_charts_flutter
+
   cupertino_icons: ^1.0.0
   flutter:
     sdk: flutter
@@ -16,3 +17,5 @@ dependencies:
   intl: ">=0.17.0 <1.0.0"
 flutter:
   uses-material-design: true
+
+version: 1.0.0

@@ -37,7 +37,20 @@ import 'canvas/pie_painter.dart' show PiePainter;
 import 'canvas/point_painter.dart' show PointPainter;
 import 'canvas/polygon_painter.dart' show PolygonPainter;
 
+class ChartCanvasDecorationConfig {
+  final bool isShowGradient;
+  final Gradient? gradient;
+
+  ChartCanvasDecorationConfig({
+    this.gradient,
+    this.isShowGradient = false,
+  });
+}
+
 class ChartCanvas implements common.ChartCanvas {
+  /// LongNTQ: adding params gradientConfig
+  final ChartCanvasDecorationConfig? gradientConfig;
+
   /// Pixels to allow to overdraw above the draw area that fades to transparent.
   static const double rect_top_gradient_pixels = 5;
 
@@ -45,7 +58,11 @@ class ChartCanvas implements common.ChartCanvas {
   final common.GraphicsFactory graphicsFactory;
   final _paint = new Paint();
 
-  ChartCanvas(this.canvas, this.graphicsFactory);
+  ChartCanvas(
+    this.canvas,
+    this.graphicsFactory, {
+    this.gradientConfig,
+  });
 
   @override
   void drawCircleSector(Point center, double radius, double innerRadius,
@@ -71,14 +88,17 @@ class ChartCanvas implements common.ChartCanvas {
   }
 
   @override
-  void drawLine(
-      {required List<Point> points,
-      Rectangle<num>? clipBounds,
-      common.Color? fill,
-      common.Color? stroke,
-      bool? roundEndCaps,
-      double? strokeWidthPx,
-      List<int>? dashPattern}) {
+  void drawLine({
+    required List<Point> points,
+    Rectangle<num>? clipBounds,
+    common.Color? fill,
+    common.Color? stroke,
+    bool? roundEndCaps,
+    double? strokeWidthPx,
+    List<int>? dashPattern,
+    common.Color? borderLineColor,
+    double? borderLineWidth,
+  }) {
     LinePainter.draw(
         canvas: canvas,
         paint: _paint,
@@ -86,6 +106,8 @@ class ChartCanvas implements common.ChartCanvas {
         clipBounds: clipBounds,
         fill: fill,
         stroke: stroke,
+        borderLineColor: borderLineColor,
+        borderLineWidth: borderLineWidth,
         roundEndCaps: roundEndCaps,
         strokeWidthPx: strokeWidthPx,
         dashPattern: dashPattern);
@@ -175,6 +197,17 @@ class ChartCanvas implements common.ChartCanvas {
         // Use separate rect for drawing stroke
         _paint.color = new Color.fromARGB(fill!.a, fill.r, fill.g, fill.b);
         _paint.style = PaintingStyle.fill;
+
+        /// LongNTQ: handle grandient color
+        if (gradientConfig?.isShowGradient == true &&
+            gradientConfig?.gradient != null) {
+          _paint.shader = gradientConfig?.gradient?.createShader(Rect.fromLTWH(
+            fillRectBounds.left.toDouble(),
+            fillRectBounds.top.toDouble(),
+            fillRectBounds.width.toDouble(),
+            fillRectBounds.height.toDouble(),
+          ));
+        }
 
         // Apply a gradient to the top [rect_top_gradient_pixels] to transparent
         // if the rectangle is higher than the [drawAreaBounds] top.

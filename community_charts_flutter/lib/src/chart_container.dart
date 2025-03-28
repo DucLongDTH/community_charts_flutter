@@ -32,7 +32,7 @@ import 'package:flutter/scheduler.dart';
 
 import 'base_chart.dart' show BaseChart;
 import 'base_chart_state.dart' show BaseChartState;
-import 'chart_canvas.dart' show ChartCanvas;
+import 'chart_canvas.dart' show ChartCanvas, ChartCanvasDecorationConfig;
 import 'graphics_factory.dart' show GraphicsFactory;
 import 'time_series_chart.dart' show TimeSeriesChart;
 import 'user_managed_state.dart' show UserManagedState;
@@ -47,14 +47,19 @@ class ChartContainer<D> extends CustomPaint {
   final common.RTLSpec? rtlSpec;
   final UserManagedState<D>? userManagedState;
 
-  ChartContainer(
-      {this.oldChartWidget,
-      required this.chartWidget,
-      required this.chartState,
-      required this.animationValue,
-      required this.rtl,
-      this.rtlSpec,
-      this.userManagedState});
+  /// LongNTQ: adding params gradientConfig
+  final ChartCanvasDecorationConfig? gradientConfig;
+
+  ChartContainer({
+    this.oldChartWidget,
+    required this.chartWidget,
+    required this.chartState,
+    required this.animationValue,
+    required this.rtl,
+    this.rtlSpec,
+    this.userManagedState,
+    this.gradientConfig,
+  });
 
   @override
   RenderCustomPaint createRenderObject(BuildContext context) {
@@ -80,7 +85,11 @@ class ChartContainerRenderObject<D> extends RenderCustomPaint
   bool _exploreMode = false;
   List<common.A11yNode>? _a11yNodes;
 
+  /// LongNTQ: adding params gradientConfig
+  ChartContainer<D>? _chartContainerConfig;
+
   void reconfigure(ChartContainer<D> config, BuildContext context) {
+    _chartContainerConfig = config;
     _chartState = config.chartState;
 
     _dateTimeFactory = (config.chartWidget is TimeSeriesChart)
@@ -298,7 +307,8 @@ class ChartContainerRenderObject<D> extends RenderCustomPaint
         chart: _chart!,
         exploreMode: _exploreMode,
         a11yNodes: _a11yNodes ?? [],
-        textDirection: textDirection);
+        textDirection: textDirection,
+        chartContainerConfig: _chartContainerConfig);
   }
 
   @override
@@ -314,36 +324,51 @@ class ChartContainerCustomPaint extends CustomPainter {
   final List<common.A11yNode> a11yNodes;
   final TextDirection textDirection;
 
+  /// LongNTQ: adding params gradientConfig
+  final ChartContainer? chartContainerConfig;
+
   factory ChartContainerCustomPaint(
       {ChartContainerCustomPaint? oldPainter,
       required common.BaseChart chart,
       bool exploreMode = false,
       List<common.A11yNode> a11yNodes = const [],
-      TextDirection textDirection = TextDirection.ltr}) {
+      TextDirection textDirection = TextDirection.ltr,
+      ChartContainer? chartContainerConfig}) {
     if (oldPainter != null &&
         oldPainter.exploreMode == exploreMode &&
         oldPainter.a11yNodes == a11yNodes &&
         oldPainter.textDirection == textDirection) {
       return oldPainter;
     } else {
+      /// LongNTQ: adding params gradientConfig
       return new ChartContainerCustomPaint._internal(
-          chart: chart,
-          exploreMode: exploreMode,
-          a11yNodes: a11yNodes,
-          textDirection: textDirection);
+        chart: chart,
+        exploreMode: exploreMode,
+        a11yNodes: a11yNodes,
+        textDirection: textDirection,
+        chartContainerConfig: chartContainerConfig,
+      );
     }
   }
 
-  ChartContainerCustomPaint._internal(
-      {required this.chart,
-      required this.exploreMode,
-      required this.a11yNodes,
-      required this.textDirection});
+  ChartContainerCustomPaint._internal({
+    required this.chart,
+    required this.exploreMode,
+    required this.a11yNodes,
+    required this.textDirection,
+    required this.chartContainerConfig,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     common.Performance.time('chartsPaint');
-    final chartsCanvas = new ChartCanvas(canvas, chart.graphicsFactory!);
+
+    /// LongNTQ: adding params gradientConfig
+    final chartsCanvas = new ChartCanvas(
+      canvas,
+      chart.graphicsFactory!,
+      gradientConfig: chartContainerConfig?.gradientConfig,
+    );
     chart.paint(chartsCanvas);
     common.Performance.timeEnd('chartsPaint');
   }

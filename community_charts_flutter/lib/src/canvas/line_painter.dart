@@ -32,59 +32,83 @@ class LinePainter {
   /// to stroke-dasharray in SVG path elements. An odd number of values in the
   /// pattern will be repeated to derive an even number of values. "1,2,3" is
   /// equivalent to "1,2,3,1,2,3."
-  static void draw(
-      {required Canvas canvas,
-      required Paint paint,
-      required List<Point> points,
-      Rectangle<num>? clipBounds,
-      common.Color? fill,
-      common.Color? stroke,
-      bool? roundEndCaps,
-      double? strokeWidthPx,
-      List<int>? dashPattern,
-      ui.Shader? shader}) {
-    if (points.isEmpty) {
-      return;
-    }
+  static void draw({
+    required Canvas canvas,
+    required Paint paint,
+    required List<Point> points,
+    Rectangle<num>? clipBounds,
+    common.Color? fill,
+    common.Color? stroke,
+    common.Color? borderLineColor,
+    double? borderLineWidth,
+    bool? roundEndCaps,
+    double? strokeWidthPx,
+    List<int>? dashPattern,
+    ui.Shader? shader,
+  }) {
+    if (points.isEmpty) return;
 
-    // Apply clip bounds as a clip region.
+    // Áp dụng clip bounds nếu có
     if (clipBounds != null) {
       canvas
         ..save()
-        ..clipRect(new Rect.fromLTWH(
-            clipBounds.left.toDouble(),
-            clipBounds.top.toDouble(),
-            clipBounds.width.toDouble(),
-            clipBounds.height.toDouble()));
+        ..clipRect(Rect.fromLTWH(
+          clipBounds.left.toDouble(),
+          clipBounds.top.toDouble(),
+          clipBounds.width.toDouble(),
+          clipBounds.height.toDouble(),
+        ));
     }
 
-    paint.color = new Color.fromARGB(stroke!.a, stroke.r, stroke.g, stroke.b);
-
+    // Cấu hình paint chính với màu stroke
+    paint.color = Color.fromARGB(stroke!.a, stroke.r, stroke.g, stroke.b);
     if (shader != null) {
       paint.shader = shader;
     }
 
-    // If the line has a single point, draw a circle.
+    // Nếu chỉ có một điểm, vẽ hình tròn
     if (points.length == 1) {
       final point = points.first;
       paint.style = PaintingStyle.fill;
-      canvas.drawCircle(new Offset(point.x.toDouble(), point.y.toDouble()),
-          strokeWidthPx ?? 0, paint);
+      canvas.drawCircle(
+        Offset(point.x.toDouble(), point.y.toDouble()),
+        strokeWidthPx ?? 0,
+        paint,
+      );
     } else {
       if (strokeWidthPx != null) {
         paint.strokeWidth = strokeWidthPx;
       }
       paint.strokeJoin = StrokeJoin.round;
       paint.style = PaintingStyle.stroke;
+      if (roundEndCaps == true) {
+        paint.strokeCap = StrokeCap.round;
+      }
+
+      // Tạo borderPaint nếu có truyền tham số border
+      Paint? borderPaint;
+      if (borderLineColor != null) {
+        borderPaint = Paint()
+          ..color = Color.fromARGB(borderLineColor.a, borderLineColor.r,
+              borderLineColor.g, borderLineColor.b)
+          ..strokeWidth = (strokeWidthPx ?? paint.strokeWidth) +
+              (borderLineWidth ?? 0) // Điều chỉnh độ dày border tại đây
+          ..style = PaintingStyle.stroke
+          ..strokeJoin = StrokeJoin.round;
+        if (roundEndCaps == true) {
+          borderPaint.strokeCap = StrokeCap.round;
+        }
+      }
 
       if (dashPattern == null || dashPattern.isEmpty) {
-        if (roundEndCaps == true) {
-          paint.strokeCap = StrokeCap.round;
-        }
-
-        _drawSolidLine(canvas, paint, points);
+        _drawSolidLine(canvas, paint, points, borderPaint: borderPaint);
       } else {
-        _drawDashedLine(canvas, paint, points, dashPattern);
+        _drawDashedLine(
+          canvas,
+          paint,
+          points,
+          dashPattern,
+        );
       }
     }
 
@@ -94,16 +118,22 @@ class LinePainter {
   }
 
   /// Draws solid lines between each point.
-  static void _drawSolidLine(Canvas canvas, Paint paint, List<Point> points) {
-    // TODO: Extract a native line component which constructs the
-    // appropriate underlying data structures to avoid conversion.
-    final path = new Path()
+  static void _drawSolidLine(
+    Canvas canvas,
+    Paint paint,
+    List<Point> points, {
+    Paint? borderPaint,
+  }) {
+    final path = Path()
       ..moveTo(points.first.x.toDouble(), points.first.y.toDouble());
-
     for (var point in points) {
       path.lineTo(point.x.toDouble(), point.y.toDouble());
     }
-
+    // Nếu truyền borderPaint thì vẽ border trước
+    if (borderPaint != null) {
+      canvas.drawPath(path, borderPaint);
+    }
+    // Vẽ đường chính
     canvas.drawPath(path, paint);
   }
 

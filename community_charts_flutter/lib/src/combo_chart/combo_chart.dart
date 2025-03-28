@@ -22,6 +22,7 @@ import 'package:community_charts_common/community_charts_common.dart' as common
         RTLSpec,
         Series,
         SeriesRendererConfig;
+import 'package:community_charts_flutter/src/chart_canvas.dart';
 import '../behaviors/chart_behavior.dart' show ChartBehavior;
 import '../base_chart.dart' show LayoutConfig;
 import '../base_chart_state.dart' show BaseChartState;
@@ -36,37 +37,37 @@ import '../user_managed_state.dart';
 /// not expose a separate DateTimeComboChart because it would just be a copy of
 /// that chart.
 class NumericComboChart extends CartesianChart<num> {
-  NumericComboChart(
-    List<common.Series<dynamic, num>> seriesList, {
-    bool? animate,
-    Duration? animationDuration,
-    common.AxisSpec? domainAxis,
-    common.NumericAxisSpec? primaryMeasureAxis,
-    common.NumericAxisSpec? secondaryMeasureAxis,
-    common.SeriesRendererConfig<num>? defaultRenderer,
-    List<common.SeriesRendererConfig<num>>? customSeriesRenderers,
-    List<ChartBehavior<num>>? behaviors,
-    List<SelectionModelConfig<num>>? selectionModels,
-    common.RTLSpec? rtlSpec,
-    LayoutConfig? layoutConfig,
-    UserManagedState<num>? userManagedState,
-    bool defaultInteractions = true,
-  }) : super(
-          seriesList,
-          animate: animate,
-          animationDuration: animationDuration,
-          domainAxis: domainAxis,
-          primaryMeasureAxis: primaryMeasureAxis,
-          secondaryMeasureAxis: secondaryMeasureAxis,
-          defaultRenderer: defaultRenderer,
-          customSeriesRenderers: customSeriesRenderers,
-          behaviors: behaviors,
-          selectionModels: selectionModels,
-          rtlSpec: rtlSpec,
-          layoutConfig: layoutConfig,
-          userManagedState: userManagedState,
-          defaultInteractions: defaultInteractions,
-        );
+  /// LongNTQ: adding params gradientConfig
+  NumericComboChart(List<common.Series<dynamic, num>> seriesList,
+      {bool? animate,
+      Duration? animationDuration,
+      common.AxisSpec? domainAxis,
+      common.NumericAxisSpec? primaryMeasureAxis,
+      common.NumericAxisSpec? secondaryMeasureAxis,
+      common.SeriesRendererConfig<num>? defaultRenderer,
+      List<common.SeriesRendererConfig<num>>? customSeriesRenderers,
+      List<ChartBehavior<num>>? behaviors,
+      List<SelectionModelConfig<num>>? selectionModels,
+      common.RTLSpec? rtlSpec,
+      LayoutConfig? layoutConfig,
+      UserManagedState<num>? userManagedState,
+      bool defaultInteractions = true,
+      ChartCanvasDecorationConfig? gradientConfig})
+      : super(seriesList,
+            animate: animate,
+            animationDuration: animationDuration,
+            domainAxis: domainAxis,
+            primaryMeasureAxis: primaryMeasureAxis,
+            secondaryMeasureAxis: secondaryMeasureAxis,
+            defaultRenderer: defaultRenderer,
+            customSeriesRenderers: customSeriesRenderers,
+            behaviors: behaviors,
+            selectionModels: selectionModels,
+            rtlSpec: rtlSpec,
+            layoutConfig: layoutConfig,
+            userManagedState: userManagedState,
+            defaultInteractions: defaultInteractions,
+            gradientConfig: gradientConfig);
 
   @override
   common.NumericCartesianChart createCommonChart(BaseChartState chartState) {
@@ -83,37 +84,36 @@ class NumericComboChart extends CartesianChart<num> {
 /// An ordinal combo chart supports rendering each series of data with different
 /// series renderers.
 class OrdinalComboChart extends CartesianChart<String> {
-  OrdinalComboChart(
-    List<common.Series<dynamic, String>> seriesList, {
-    bool? animate,
-    Duration? animationDuration,
-    common.AxisSpec? domainAxis,
-    common.NumericAxisSpec? primaryMeasureAxis,
-    common.NumericAxisSpec? secondaryMeasureAxis,
-    common.SeriesRendererConfig<String>? defaultRenderer,
-    List<common.SeriesRendererConfig<String>>? customSeriesRenderers,
-    List<ChartBehavior<String>>? behaviors,
-    List<SelectionModelConfig<String>>? selectionModels,
-    common.RTLSpec? rtlSpec,
-    LayoutConfig? layoutConfig,
-    UserManagedState<String>? userManagedState,
-    bool defaultInteractions = true,
-  }) : super(
-          seriesList,
-          animate: animate,
-          animationDuration: animationDuration,
-          domainAxis: domainAxis,
-          primaryMeasureAxis: primaryMeasureAxis,
-          secondaryMeasureAxis: secondaryMeasureAxis,
-          defaultRenderer: defaultRenderer,
-          customSeriesRenderers: customSeriesRenderers,
-          behaviors: behaviors,
-          selectionModels: selectionModels,
-          rtlSpec: rtlSpec,
-          layoutConfig: layoutConfig,
-          userManagedState: userManagedState,
-          defaultInteractions: defaultInteractions,
-        );
+  OrdinalComboChart(List<common.Series<dynamic, String>> seriesList,
+      {bool? animate,
+      Duration? animationDuration,
+      common.AxisSpec? domainAxis,
+      common.NumericAxisSpec? primaryMeasureAxis,
+      common.NumericAxisSpec? secondaryMeasureAxis,
+      common.SeriesRendererConfig<String>? defaultRenderer,
+      List<common.SeriesRendererConfig<String>>? customSeriesRenderers,
+      List<ChartBehavior<String>>? behaviors,
+      List<SelectionModelConfig<String>>? selectionModels,
+      common.RTLSpec? rtlSpec,
+      LayoutConfig? layoutConfig,
+      UserManagedState<String>? userManagedState,
+      bool defaultInteractions = true,
+      ChartCanvasDecorationConfig? gradientConfig})
+      : super(seriesList,
+            animate: animate,
+            animationDuration: animationDuration,
+            domainAxis: domainAxis,
+            primaryMeasureAxis: primaryMeasureAxis,
+            secondaryMeasureAxis: secondaryMeasureAxis,
+            defaultRenderer: defaultRenderer,
+            customSeriesRenderers: customSeriesRenderers,
+            behaviors: behaviors,
+            selectionModels: selectionModels,
+            rtlSpec: rtlSpec,
+            layoutConfig: layoutConfig,
+            userManagedState: userManagedState,
+            defaultInteractions: defaultInteractions,
+            gradientConfig: gradientConfig);
 
   @override
   common.OrdinalCartesianChart createCommonChart(BaseChartState chartState) {

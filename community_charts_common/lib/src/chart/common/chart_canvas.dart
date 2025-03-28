@@ -14,7 +14,6 @@
 // limitations under the License.
 
 import 'dart:math' show Point, Rectangle;
-
 import '../../common/color.dart' show Color;
 import '../../common/graphics_factory.dart' show GraphicsFactory;
 import '../../common/text_element.dart' show TextElement;
@@ -67,6 +66,8 @@ abstract class ChartCanvas {
       Rectangle<num>? clipBounds,
       Color? fill,
       Color? stroke,
+      Color? borderLineColor,
+      double? borderLineWidth,
       bool? roundEndCaps,
       double? strokeWidthPx,
       List<int>? dashPattern});

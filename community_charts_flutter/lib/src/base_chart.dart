@@ -24,6 +24,7 @@ import 'package:community_charts_common/community_charts_common.dart' as common
         SeriesRendererConfig,
         SelectionModelType,
         SelectionTrigger;
+import 'package:community_charts_flutter/src/chart_canvas.dart';
 import 'behaviors/select_nearest.dart' show SelectNearest;
 import 'package:meta/meta.dart' show immutable;
 import 'behaviors/chart_behavior.dart'
@@ -37,6 +38,9 @@ import 'user_managed_state.dart' show UserManagedState;
 abstract class BaseChart<D> extends StatefulWidget {
   /// Series list to draw.
   final List<common.Series<dynamic, D>> seriesList;
+
+  /// LongNTQ: adding params gradientConfig
+  final ChartCanvasDecorationConfig? gradientConfig;
 
   /// Animation transitions.
   final bool animate;
@@ -69,18 +73,20 @@ abstract class BaseChart<D> extends StatefulWidget {
   /// Optional state that overrides internally kept state, such as selection.
   final UserManagedState<D>? userManagedState;
 
-  BaseChart(this.seriesList,
-      {bool? animate,
-      Duration? animationDuration,
-      this.defaultRenderer,
-      this.customSeriesRenderers,
-      this.behaviors,
-      this.selectionModels,
-      this.rtlSpec,
-      this.defaultInteractions = true,
-      this.layoutConfig,
-      this.userManagedState})
-      : this.animate = animate ?? true,
+  BaseChart(
+    this.seriesList, {
+    bool? animate,
+    Duration? animationDuration,
+    this.defaultRenderer,
+    this.customSeriesRenderers,
+    this.behaviors,
+    this.selectionModels,
+    this.rtlSpec,
+    this.defaultInteractions = true,
+    this.layoutConfig,
+    this.userManagedState,
+    this.gradientConfig,
+  })  : this.animate = animate ?? true,
         this.animationDuration =
             animationDuration ?? const Duration(milliseconds: 300);
 
