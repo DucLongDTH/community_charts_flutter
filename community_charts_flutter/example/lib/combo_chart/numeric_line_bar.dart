@@ -50,27 +50,17 @@ class NumericComboLineBarChart extends StatelessWidget {
   static List<charts.Series<LinearSales, num>> _createRandomData() {
     final random = new Random();
 
-    final desktopSalesData = [
-      new LinearSales(0, random.nextInt(100)),
-      new LinearSales(1, random.nextInt(100)),
-      new LinearSales(2, random.nextInt(100)),
-      new LinearSales(3, random.nextInt(100)),
-    ];
+    final desktopSalesData = List.generate(30, (index) {
+      return LinearSales(index, random.nextInt(100));
+    });
 
-    final tableSalesData = [
-      new LinearSales(0, desktopSalesData[0].sales),
-      new LinearSales(1, desktopSalesData[1].sales),
-      new LinearSales(2, desktopSalesData[2].sales),
-      new LinearSales(3, desktopSalesData[3].sales),
-    ];
+    final tableSalesData = List.generate(30, (index) {
+      return LinearSales(index, desktopSalesData[index].sales);
+    });
 
-    final mobileSalesData = [
-      new LinearSales(0, tableSalesData[0].sales * 2),
-      new LinearSales(1, tableSalesData[1].sales * 2),
-      new LinearSales(2, tableSalesData[2].sales * 2),
-      new LinearSales(3, tableSalesData[3].sales * 2),
-    ];
-
+    final mobileSalesData = List.generate(30, (index) {
+      return LinearSales(index, tableSalesData[index].sales * 2);
+    });
     return [
       new charts.Series<LinearSales, int>(
         id: 'Desktop',
@@ -113,7 +103,10 @@ class NumericComboLineBarChart extends StatelessWidget {
           ),
         ),
         animate: animate,
-        behaviors: [charts.PanAndZoomBehavior()],
+        behaviors: [
+          charts.PanAndZoomBehavior(),
+          charts.SlidingViewport(),
+        ],
         // Configure the default renderer as a line renderer. This will be used
         // for any series that does not define a rendererIdKey.
         defaultRenderer: new charts.LineRendererConfig(
@@ -124,7 +117,61 @@ class NumericComboLineBarChart extends StatelessWidget {
         customSeriesRenderers: [
           new charts.BarRendererConfig(
               // ID used to link series to this renderer.
-              customRendererId: 'customBar')
+              customRendererId: 'customBar'),
+          charts.PointRendererConfig(
+            customRendererId: 'PointRendererConfig',
+            radiusPx: 3.5,
+            strokeWidthPx: 2.0,
+            // symbolRenderer: charts.SymbolRenderer,
+
+            pointRendererDecorators: [
+              charts.PointLabelDecorator<num>(
+                labelCallback: (domain) {
+                  if (domain is LinearSales?) {
+                    // final selected = selectedDomains.contains(domain);
+                    return charts.PointLabelSpec(
+                      label: domain?.sales.toString() ?? '',
+                      selected: false,
+                    );
+                  }
+                  return charts.PointLabelSpec(
+                    label: '',
+                    selected: false,
+                  );
+                },
+              )
+            ],
+          ),
+          charts.LineRendererConfig(
+            customRendererId: 'renderId',
+            areaOpacity: 0.1,
+            dashPattern: null,
+            includeArea: false,
+            includeLine: true,
+            includePoints: false,
+            radiusPx: 3.5,
+            roundEndCaps: false,
+            strokeWidthPx: 2.0,
+            lineBorderColor: null,
+            lineBorderWidth: null,
+            pointRendererDecorators: [
+              charts.PointLabelDecorator<num>(
+                labelCallback: (domain) {
+                  if (domain is LinearSales?) {
+                    // final selected = selectedDomains.contains(domain);
+                    return charts.PointLabelSpec(
+                      label: domain?.sales.toString() ?? '',
+                      selected: false,
+                    );
+                  }
+                  return charts.PointLabelSpec(
+                    label: '',
+                    selected: false,
+                  );
+                },
+              )
+            ],
+          )
         ]);
   }
 
