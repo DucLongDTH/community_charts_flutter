@@ -78,6 +78,8 @@ class PointLabelDecorator<D> extends PointRendererDecorator<D> {
     final labelX = point.x!.toInt() - horizontalPadding;
     final labelY = point.y!.toInt() - verticalPadding;
 
+    if (labelX < drawBounds.left || labelX > (drawBounds.right - 20)) return;
+
     canvas.drawText(labelElement, labelX, labelY);
   }
 

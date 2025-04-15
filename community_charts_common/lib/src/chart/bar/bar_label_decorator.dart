@@ -220,6 +220,11 @@ class BarLabelDecorator<D> extends BarRendererDecorator<D> {
                 labelElement.measurement.horizontalSliceWidth / 2)
             .round();
 
+        //TODO Long CALC
+        if (labelX < drawBounds.left || labelX > (drawBounds.right - 25)) {
+          return;
+        }
+
         canvas.drawText(labelElement, labelX, labelY);
         labelsDrawn += 1;
       }
