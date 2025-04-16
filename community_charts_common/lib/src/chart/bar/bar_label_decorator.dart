@@ -168,7 +168,7 @@ class BarLabelDecorator<D> extends BarRendererDecorator<D> {
         ..textStyle = calculatedLabelPosition == BarLabelPosition.inside
             ? datumInsideLabelStyle
             : datumOutsideLabelStyle
-        ..maxWidth = bounds.width
+        ..maxWidth = bounds.width + 200
         ..textDirection = rtl ? TextDirection.rtl : TextDirection.ltr);
 
       // Total label height depends on the label element's text style.
